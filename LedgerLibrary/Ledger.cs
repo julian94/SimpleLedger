@@ -27,12 +27,12 @@ public class Ledger
         }
         return result;
     }
-    public async Task<LedgerRecord> AddFileToLedger(string fileName, string owner, DateTime timestamp, byte[] fileHash)
+    public async Task<LedgerRecord> AddFileToLedger(string comment, string owner, DateTime timestamp, byte[] fileHash)
     {
         LedgerRecord result;
         lock (this)
         {
-            result = new LedgerRecord(fileName,
+            result = new LedgerRecord(comment,
                 owner,
                 timestamp,
                 fileHash,
@@ -45,27 +45,27 @@ public class Ledger
 
 public readonly record struct LedgerRecord
 {
-    public readonly string FileName { get; init; }
+    public readonly string comment { get; init; }
     public readonly string Owner { get; init; }
     public readonly DateTime Timestamp { get; init; }
     public readonly byte[] FileHash { get; init; }
     public readonly byte[] PreviousHash { get; init; }
 
     public readonly byte[] RecordHash { get; init; }
-    public LedgerRecord(string fileName, string owner, DateTime timestamp, byte[] fileHash, byte[] previousHash)
+    public LedgerRecord(string comment, string owner, DateTime timestamp, byte[] fileHash, byte[] previousHash)
     {
-        FileName = fileName;
+        comment = comment;
         Owner = owner;
         Timestamp = timestamp;
         FileHash = fileHash;
         PreviousHash = previousHash;
 
-        var fileNameBytes = Encoding.UTF8.GetBytes(fileName);
+        var commentBytes = Encoding.UTF8.GetBytes(comment);
         var ownerBytes = Encoding.UTF8.GetBytes(owner);
         var timestampBytes = BitConverter.GetBytes(timestamp.ToBinary());
 
         var baseRecord = new byte[
-            fileNameBytes.Length +
+            commentBytes.Length +
             ownerBytes.Length +
             timestampBytes.Length +
             fileHash.Length +
@@ -73,8 +73,8 @@ public readonly record struct LedgerRecord
             ];
         var position = 0;
 
-        Array.Copy(fileNameBytes, 0, baseRecord, position, fileNameBytes.Length);
-        position += fileName.Length;
+        Array.Copy(commentBytes, 0, baseRecord, position, commentBytes.Length);
+        position += comment.Length;
         Array.Copy(ownerBytes, 0, baseRecord, position, ownerBytes.Length);
         position += ownerBytes.Length;
         Array.Copy(timestampBytes, 0, baseRecord, position, timestampBytes.Length);

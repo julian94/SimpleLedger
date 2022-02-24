@@ -51,13 +51,13 @@ public class LedgerTests
         var ledgerB = new Ledger(Seed);
 
         var churchTime = DateTime.Parse("2018-08-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        var churchA = await ledgerA.AddFileToLedger("church.jpg", "John.Smith@example.com", churchTime, ChurchHash);
-        var churchB = await ledgerB.AddFileToLedger("church.jpg", "John.Smith@example.com", churchTime, ChurchHash);
+        var churchA = await ledgerA.AddFileToLedger("Image of church.", "John.Smith@example.com", churchTime, ChurchHash);
+        var churchB = await ledgerB.AddFileToLedger("Image of church.", "John.Smith@example.com", churchTime, ChurchHash);
         Assert.AreEqual(churchA.RecordHash, churchB.RecordHash);
 
         var icelandTime = DateTime.Parse("2018-08-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        var icelandA = await ledgerA.AddFileToLedger("iceland.jpg", "John.Smith@example.com", icelandTime, IcelandHash);
-        var icelandB = await ledgerB.AddFileToLedger("iceland.jpg", "John.Smith@example.com", icelandTime, IcelandHash);
+        var icelandA = await ledgerA.AddFileToLedger("Iceland was nice this year.", "John.Smith@example.com", icelandTime, IcelandHash);
+        var icelandB = await ledgerB.AddFileToLedger("Iceland was nice this year.", "John.Smith@example.com", icelandTime, IcelandHash);
         Assert.AreEqual(icelandA.RecordHash, icelandB.RecordHash);
 
         var mountainTime = DateTime.Parse("2018-08-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
@@ -66,8 +66,8 @@ public class LedgerTests
         Assert.AreEqual(mountainA.RecordHash, mountainB.RecordHash);
 
         var roadTime = DateTime.Parse("2018-08-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        var roadA = await ledgerA.AddFileToLedger("mountain.jpg", "John.Smith@example.com", roadTime, RoadHash);
-        var roadB = await ledgerB.AddFileToLedger("mountain.jpg", "John.Smith@example.com", roadTime, RoadHash);
+        var roadA = await ledgerA.AddFileToLedger("#JustRoadThings", "John.Smith@example.com", roadTime, RoadHash);
+        var roadB = await ledgerB.AddFileToLedger("#JustRoadThings", "John.Smith@example.com", roadTime, RoadHash);
         Assert.AreEqual(roadA.RecordHash, roadB.RecordHash);
     }
 
@@ -77,11 +77,10 @@ public class LedgerTests
         var ledgerA = new Ledger(Seed);
 
         var churchTime = DateTime.Parse("2018-08-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        _ = ledgerA.AddFileToLedger("church.jpg", "John.Smith@example.com", churchTime, ChurchHash);
+        _ = await ledgerA.AddFileToLedger("Image of church.", "John.Smith@example.com", churchTime, ChurchHash);
 
         var icelandTime = DateTime.Parse("2028-08-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        var icelandA = await ledgerA.AddFileToLedger("iceland.jpg", "John.Smith@example.com", icelandTime, IcelandHash);
-
+        _ = await ledgerA.AddFileToLedger("Iceland was nice this year.", "John.Smith@example.com", icelandTime, IcelandHash);
         var ledgerB = new Ledger(icelandA.RecordHash);
 
         var mountainTime = DateTime.Parse("2018-08-05T07:22:16.0000000Z", CultureInfo.InvariantCulture);
@@ -90,8 +89,8 @@ public class LedgerTests
         Assert.AreEqual(mountainA.RecordHash, mountainB.RecordHash);
 
         var roadTime = DateTime.Parse("2000-01-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        var roadA = await ledgerA.AddFileToLedger("road.jpg", "John.Smith@example.com", roadTime, RoadHash);
-        var roadB = await ledgerB.AddFileToLedger("road.jpg", "John.Smith@example.com", roadTime, RoadHash);
+        var roadA = await ledgerA.AddFileToLedger("#JustRoadThings", "John.Smith@example.com", roadTime, RoadHash);
+        var roadB = await ledgerB.AddFileToLedger("#JustRoadThings", "John.Smith@example.com", roadTime, RoadHash);
         Assert.AreEqual(roadA.RecordHash, roadB.RecordHash);
     }
 
@@ -114,7 +113,7 @@ public class LedgerTests
         testLedger += mountain.ToString();
 
         var roadTime = DateTime.Parse("2000-01-18T07:22:16.0000000Z", CultureInfo.InvariantCulture);
-        var road = await ledger.AddFileToLedger("road.jpg", "John.Smith@example.com", roadTime, RoadHash);
+        var road = await ledger.AddFileToLedger("#JustRoadThings", "John.Smith@example.com", roadTime, RoadHash);
         testLedger += road.ToString();
 
         Assert.AreEqual(WrittenLedger, testLedger);
